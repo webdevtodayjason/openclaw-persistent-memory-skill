@@ -10,8 +10,7 @@
   },
   "scripts": {
     "dev": "tsx watch src/worker/server.ts",
-    "build": "tsc && cp src/database/schema.sql dist/database/ && npm run build:ui",
-    "build:ui": "cd ui && npm run build",
+    "build": "tsc && cp src/database/schema.sql dist/database/",
     "start": "node dist/worker/server.js",
     "test": "vitest",
     "test:unit": "vitest run --dir tests/unit",
@@ -34,12 +33,12 @@
   "license": "AGPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/openclaw/openclaw-mem.git"
+    "url": "https://github.com/webdevtodayjason/openclaw_memory.git"
   },
   "bugs": {
-    "url": "https://github.com/openclaw/openclaw-mem/issues"
+    "url": "https://github.com/webdevtodayjason/openclaw_memory/issues"
   },
-  "homepage": "https://github.com/openclaw/openclaw-mem#readme",
+  "homepage": "https://github.com/webdevtodayjason/openclaw_memory#readme",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -64,7 +63,8 @@
   },
   "files": [
     "dist",
-    "ui/dist",
+    "extension",
+    "skill",
     "README.md",
     "LICENSE"
   ]
