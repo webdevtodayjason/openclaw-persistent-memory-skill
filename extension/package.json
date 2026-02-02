@@ -1,0 +1,32 @@
+{
+  "name": "@openclaw/mem",
+  "version": "0.1.0",
+  "description": "OpenClaw-Mem extension - persistent memory with automatic capture",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "peerDependencies": {
+    "openclaw": ">=0.1.0"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.32.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "openclaw.plugin.json"
+  ],
+  "keywords": [
+    "openclaw",
+    "memory",
+    "plugin",
+    "extension"
+  ],
+  "license": "AGPL-3.0"
+}
