@@ -5,7 +5,7 @@
  */
 
 import { spawn, ChildProcess } from 'child_process';
-import { existsSync, mkdirSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync, readFileSync, openSync } from 'fs';
 import { join } from 'path';
 import { createServer, DEFAULT_PORT } from './worker/server.js';
 import { isWorkerRunning, searchMemory, getObservations } from './hooks/index.js';
@@ -78,10 +78,13 @@ async function startDaemon(port: number): Promise<void> {
     return;
   }
   
-  // Spawn background process
+  // Open log file for output
+  const logFd = openSync(LOG_FILE, 'a');
+  
+  // Spawn background process with output to log file
   const child = spawn(process.execPath, [process.argv[1], 'start', '--port', String(port)], {
     detached: true,
-    stdio: ['ignore', 'pipe', 'pipe'],
+    stdio: ['ignore', logFd, logFd],
     env: { ...process.env, OPENCLAW_MEM_PORT: String(port) }
   });
   
@@ -90,7 +93,7 @@ async function startDaemon(port: number): Promise<void> {
     writeFileSync(PID_FILE, String(child.pid));
   }
   
-  // Detach
+  // Detach completely
   child.unref();
   
   // Wait for startup
