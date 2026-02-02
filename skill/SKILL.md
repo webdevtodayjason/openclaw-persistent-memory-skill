@@ -1,101 +1,109 @@
 ---
-name: openclaw-mem
+name: openclaw-persistent-memory
 version: 0.1.0
 description: Persistent memory system - automatic context capture and semantic search
-author: OpenClaw Contributors
+author: Jason Brashear / Titanium Computing
 repository: https://github.com/webdevtodayjason/openclaw_memory
+metadata:
+  openclaw:
+    requires:
+      bins: ["openclaw-persistent-memory"]
+    install:
+      - id: node
+        kind: node
+        package: openclaw-persistent-memory
+        bins: ["openclaw-persistent-memory"]
+        label: "Install OpenClaw Persistent Memory (npm)"
 ---
 
-# OpenClaw-Mem Skill
+# OpenClaw Persistent Memory
 
-Persistent memory system that automatically captures context across sessions.
+Persistent memory system that automatically captures context across sessions using SQLite + FTS5.
 
 ## Features
 
-- 🧠 **Automatic capture** - Every tool use is recorded
-- 🔍 **Semantic search** - Query past work with natural language
+- 🧠 **Auto-capture** - Important observations saved automatically after each response
+- 🔍 **Auto-recall** - Relevant memories injected before each prompt
+- 💾 **SQLite + FTS5** - Fast full-text search across all memories
+- 🛠️ **Tools** - `memory_search`, `memory_get`, `memory_store`, `memory_delete`
 - 📊 **Progressive disclosure** - Token-efficient retrieval
-- 🔗 **Reference IDs** - Link MEMORY.md to observations
 
 ## Setup
 
-1. **Install the worker service:**
+1. **Install the npm package:**
    ```bash
-   npm install -g openclaw-mem
-   openclaw-mem install
-   openclaw-mem start-daemon
+   npm install -g openclaw-persistent-memory
    ```
 
-2. **Verify it's running:**
+2. **Start the worker service:**
    ```bash
-   curl http://127.0.0.1:37778/api/health
+   openclaw-persistent-memory start
    ```
 
-## Usage
+3. **Install the OpenClaw extension:**
+   ```bash
+   # Copy extension to OpenClaw extensions directory
+   cp -r node_modules/openclaw-persistent-memory/extension ~/.openclaw/extensions/openclaw-mem
+   cd ~/.openclaw/extensions/openclaw-mem && npm install
+   ```
 
-### Searching Memory
+4. **Configure OpenClaw** (in `~/.openclaw/openclaw.json`):
+   ```json
+   {
+     "plugins": {
+       "slots": {
+         "memory": "openclaw-mem"
+       },
+       "allow": ["openclaw-mem"],
+       "entries": {
+         "openclaw-mem": {
+           "enabled": true,
+           "config": {
+             "workerUrl": "http://127.0.0.1:37778",
+             "autoCapture": true,
+             "autoRecall": true
+           }
+         }
+       }
+     }
+   }
+   ```
 
-Ask the agent to search past work:
+5. **Restart OpenClaw gateway**
 
-```
-> What did we do with the morning briefing script?
+## Tools Provided
 
-> Search memory for "PATH fix cron"
+| Tool | Description |
+|------|-------------|
+| `memory_search` | Search memories with natural language |
+| `memory_get` | Get a specific memory by ID |
+| `memory_store` | Save important information |
+| `memory_delete` | Delete a memory by ID |
 
-> Show me observation #1234
-```
+## API Endpoints
 
-### Memory Commands
+Worker runs on `http://127.0.0.1:37778`:
 
-- **Search:** "search memory for [query]"
-- **Get observation:** "show observation #[id]"
-- **Timeline:** "show timeline around observation #[id]"
-- **Stats:** "show memory stats"
-
-### MEMORY.md Integration
-
-Reference observations in your MEMORY.md:
-
-```markdown
-## Morning Briefing Script
-Fixed PATH issue for cron on 2026-02-01.
-See: observation #1234
-```
-
-## API
-
-The worker service runs on `http://127.0.0.1:37778`:
-
-| Endpoint | Description |
-|----------|-------------|
-| `GET /api/health` | Health check |
-| `POST /api/search` | Search observations |
-| `GET /api/observations/:id` | Get observation |
-| `POST /api/timeline` | Get chronological context |
-| `GET /api/stats` | Database statistics |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/health` | GET | Health check |
+| `/api/stats` | GET | Database statistics |
+| `/api/search` | POST | Full-text search |
+| `/api/observations` | GET | List recent observations |
+| `/api/observations/:id` | GET | Get observation |
+| `/api/observations/:id` | DELETE | Delete observation |
+| `/api/observations/:id` | PATCH | Update observation |
 
 ## Troubleshooting
 
 ### Worker not running
 ```bash
-openclaw-mem status
-openclaw-mem start-daemon
+curl http://127.0.0.1:37778/api/health
+# If fails, restart:
+openclaw-persistent-memory start
 ```
 
-### Search returns empty
-- Check if observations exist: `openclaw-mem stats`
-- Verify worker is running: `curl http://127.0.0.1:37778/api/health`
-
-## Configuration
-
-Settings in `~/.openclaw-mem/settings.json`:
-
-```json
-{
-  "port": 37778,
-  "contextInjection": {
-    "enabled": true,
-    "maxTokens": 4000
-  }
-}
-```
+### Auto-recall not working
+- Check OpenClaw logs: `tail ~/.openclaw/logs/*.log | grep openclaw-mem`
+- Verify `plugins.slots.memory` is set to `"openclaw-mem"`
+- Restart gateway after config changes

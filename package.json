@@ -1,12 +1,12 @@
 {
-  "name": "openclaw-mem",
+  "name": "openclaw-persistent-memory",
   "version": "0.1.0",
   "type": "module",
   "description": "Persistent memory system for OpenClaw - automatic context capture, semantic search, and progressive disclosure",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "openclaw-mem": "./dist/cli.js"
+    "openclaw-persistent-memory": "./dist/cli.js"
   },
   "scripts": {
     "dev": "tsx watch src/worker/server.ts",
