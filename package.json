@@ -46,7 +46,7 @@
     "better-sqlite3": "^11.0.0",
     "chromadb": "^1.8.0",
     "fastify": "^4.26.0",
-    "fastify-static": "^4.7.0",
+    "@fastify/static": "^7.0.0",
     "glob": "^10.3.0",
     "tiktoken": "^1.0.0",
     "zod": "^3.22.0"
