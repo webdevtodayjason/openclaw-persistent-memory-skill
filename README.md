@@ -291,12 +291,14 @@ npm run package         # Create distributable
 
 ## Roadmap
 
-### v0.1.0 (MVP)
+### v0.1.0 (MVP) ✅
 - [x] Project structure
-- [ ] Worker service with SQLite
-- [ ] Basic hooks (session-start, tool-result, session-end)
-- [ ] Simple search (FTS5)
-- [ ] Context injection
+- [x] Worker service with SQLite
+- [x] Basic hooks (session-start, tool-result, session-end)
+- [x] Simple search (FTS5)
+- [x] Context injection
+- [x] CLI tool
+- [x] Skill for agents
 
 ### v0.2.0
 - [ ] Vector search (Chroma integration)
@@ -312,7 +314,8 @@ npm run package         # Create distributable
 
 ### v1.0.0
 - [ ] Full OpenClaw plugin integration
-- [ ] Marketplace listing
+- [ ] Publish to npm
+- [ ] Publish to ClawHub (https://clawhub.ai)
 - [ ] Documentation site
 - [ ] Community contributions
 
